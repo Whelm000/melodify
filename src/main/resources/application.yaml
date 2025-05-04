@@ -1,18 +1,40 @@
 server:
-  port: 8080
+  port: 9171
 # 连接池配置
 spring:
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher  # 使用 ant 路径匹配策略
   application:
     name: melodify
   datasource:
-    type: com.alibaba.druid.pool.DruidDataSource
+    type: com.alibaba.druid.pool.DruidDataSource #使用druid连接池
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql:///melodify
+    url: jdbc:mysql:///melodify?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
     username: root
     password: 18836326309
 
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
 
-mybatis-plus:
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html  # Swagger UI 路径
+    tags-sorter: alpha      # 按字母排序标签
+  api-docs:
+    path: /v3/api-docs      # OpenAPI 规范文件路径
+
+knife4j:
+  enable: true              # 开启 Knife4j 增强
+  prduction: false          # 生产环境关闭增强
+  setting:
+    language: zh_cn         # 中文界面
+
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.example.melodify.pojo
   configuration:
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
-  type-aliases-package: cn.example.melodify.pojo
+    map-underscore-to-camel-case: true  # 开启驼峰命名规则映射
+    auto-mapping-behavior: full  # 自动映射行为设置为全
+    log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl
